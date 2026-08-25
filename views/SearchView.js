@@ -13,7 +13,8 @@ export function renderSearchView(state) {
   const results = searchPrompts(prompts, searchFilters);
   const tags = uniqueTags(prompts);
 
-  const categoryOptions = categories
+  const categoryOptions = [...categories]
+    .sort((a, b) => a.name.localeCompare(b.name))
     .map((c) => `<option value="${c.id}" ${searchFilters.categoryId === c.id ? 'selected' : ''}>${escapeHtml(c.name)}</option>`)
     .join('');
   const tagOptions = tags
