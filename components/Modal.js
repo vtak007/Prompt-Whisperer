@@ -21,6 +21,23 @@ export function renderModal(state) {
     `);
   }
 
+  if (modal.type === 'new-tag') {
+    return wrap(`
+      <h2 class="modal-title">New Tag</h2>
+      <form data-modal-form="new-tag">
+        <div class="field">
+          <label for="new-tag-name">Tag name</label>
+          <input type="text" id="new-tag-name" name="name" autofocus />
+          <div class="field-error" data-error-for="name"></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" data-action="close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    `);
+  }
+
   if (modal.type === 'edit-category') {
     return wrap(`
       <h2 class="modal-title">Rename Category</h2>

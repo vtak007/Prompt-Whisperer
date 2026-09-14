@@ -13,7 +13,7 @@ import { renderOptimizeView } from './views/OptimizeView.js';
 import { renderImportExportView } from './views/ImportExportView.js';
 import { renderSearchView } from './views/SearchView.js';
 import { renderSettingsView } from './views/SettingsView.js';
-import { validatePrompt, validateCategoryName, validateTagName, normalizeTag } from './utils/validation.js';
+import { validatePrompt, validateCategoryName, validateTagName } from './utils/validation.js';
 import { copyToClipboard } from './services/clipboard.js';
 import { insertIntoActiveTab } from './services/promptInsertion.js';
 import { optimizePrompt, fetchAnthropicModels } from './services/optimizer.js';
@@ -357,6 +357,9 @@ document.getElementById('app').addEventListener('click', async (event) => {
       setState({ formDraft: { ...draft, tags: draft.tags.filter((t) => t !== el.dataset.tag) } });
       break;
     }
+    case 'add-tag':
+      actions.openModal({ type: 'new-tag' });
+      break;
 
     // Optimize
     case 'run-optimize': {
@@ -560,15 +563,13 @@ document.getElementById('app').addEventListener('input', (event) => {
   }
 });
 
-// --- keydown: tag input + global shortcuts ---
+// --- change: tag select + global shortcuts ---
 
-document.getElementById('app').addEventListener('keydown', (event) => {
+document.getElementById('app').addEventListener('change', (event) => {
   const el = event.target;
-  if (el.dataset && el.dataset.field === 'tag-input' && event.key === 'Enter') {
-    event.preventDefault();
-    const raw = el.value;
-    if (!raw.trim()) return;
-    const tag = normalizeTag(raw);
+  if (el.dataset && el.dataset.field === 'tag-select') {
+    const tag = el.value;
+    if (!tag) return;
     const form = el.closest('form');
     if (form) syncDraftFromForm(form);
     const draft = getState().formDraft;
@@ -659,6 +660,22 @@ document.getElementById('app').addEventListener('submit', async (event) => {
       const formEl = qs(viewEl, 'form[data-form="prompt-form"]');
       if (formEl) syncDraftFromForm(formEl, { categoryId: category.id });
     }
+    actions.closeModal();
+    return;
+  }
+
+  if (form.dataset.modalForm === 'new-tag') {
+    const name = qs(form, '[name="name"]').value;
+    const draft = getState().formDraft;
+    const { valid, error, name: cleanName } = validateTagName(name, draft.tags);
+    if (!valid) {
+      qs(form, '[data-error-for="name"]').textContent = error;
+      return;
+    }
+    const formEl = qs(viewEl, 'form[data-form="prompt-form"]');
+    if (formEl) syncDraftFromForm(formEl);
+    const currentDraft = getState().formDraft;
+    setState({ formDraft: { ...currentDraft, tags: [...currentDraft.tags, cleanName] } });
     actions.closeModal();
     return;
   }
