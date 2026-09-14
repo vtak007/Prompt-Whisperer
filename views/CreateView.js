@@ -1,14 +1,23 @@
 import { escapeHtml } from '../utils/dom.js';
 import { renderTagChip } from '../components/TagChip.js';
 
+function uniqueTags(prompts) {
+  const set = new Set();
+  prompts.forEach((p) => (p.tags || []).forEach((t) => set.add(t)));
+  return Array.from(set).sort();
+}
+
 export function renderPromptForm(state, { isEdit = false } = {}) {
-  const { categories } = state;
+  const { categories, prompts } = state;
   const draft = state.formDraft;
   const categoryOptions = [...categories]
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((c) => `<option value="${c.id}" ${draft.categoryId === c.id ? 'selected' : ''}>${escapeHtml(c.name)}</option>`)
     .join('');
   const tagChips = draft.tags.map((t) => renderTagChip(t, { removable: true })).join('');
+  const tagOptions = uniqueTags(prompts)
+    .map((t) => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`)
+    .join('');
 
   return `
     <h2 class="section-heading">${isEdit ? 'Edit Prompt' : 'Create Prompt'}</h2>
@@ -30,9 +39,13 @@ export function renderPromptForm(state, { isEdit = false } = {}) {
       </div>
 
       <div class="field">
-        <label for="prompt-tag-input">Tags</label>
+        <label for="prompt-tag-select">Tags</label>
         <div class="tag-input-row">${tagChips}</div>
-        <input type="text" id="prompt-tag-input" data-field="tag-input" placeholder="Add tags (press Enter)..." />
+        <select id="prompt-tag-select" data-field="tag-select">
+          <option value="">Select a tag...</option>
+          ${tagOptions}
+        </select>
+        <button type="button" class="btn-link" data-action="add-tag" style="margin-top:6px;">+ New Tag</button>
         <div class="hint">Add multiple tags to help organize</div>
       </div>
 
