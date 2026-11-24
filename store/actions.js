@@ -4,7 +4,7 @@ import { newId, slugify } from '../utils/ids.js';
 import { nowIso } from '../utils/dates.js';
 
 export async function loadAll() {
-  const root = await storage.getAll();
+  const root = await storage.syncCategoryNames();
   setState({ ...root, ready: true });
 }
 
@@ -106,8 +106,8 @@ export async function createCategory(name) {
 }
 
 export async function renameCategory(id, name) {
-  const categories = await storage.updateCategory(id, { name: name.trim() });
-  setState({ categories, prompts: getState().prompts.map((p) => (p.categoryId === id ? { ...p, categoryName: name.trim() } : p)) });
+  const { categories, prompts } = await storage.renameCategory(id, name.trim());
+  setState({ categories, prompts });
 }
 
 export async function removeCategory(id, reassignToId = null) {
