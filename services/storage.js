@@ -158,7 +158,6 @@ export const storage = {
   deletePrompt,
   getCategories,
   saveCategory,
-  updateCategory,
   renameCategory,
   syncCategoryNames,
   deleteCategory,
