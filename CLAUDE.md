@@ -21,7 +21,8 @@ Guidance for working in the Prompt Whisperer Chrome extension repo (formerly "Pr
 | `views/*.js` | One render function per screen (Library, Create, Edit, Optimize, Import/Export, Search, Settings). Pure functions of state → HTML string. |
 | `components/*.js` | Shared render fragments (Header, Navigation, PromptCard, TagChip, Modal, Toast, Footer). |
 | `components/icons.js` | The inline-SVG icon set. `icon(name)` returns an SVG string; all strokes/fills use `currentColor` so icons recolor from CSS. |
-| `store/privacy-policy.html` | Standalone privacy policy page for the Chrome Web Store listing; not loaded by the extension itself. |
+| `webstore/privacy-policy.html` | Standalone privacy policy page for the Chrome Web Store listing; not loaded by the extension itself. |
+| `Workspace Map.md` | Orientation map: module/symbol map, wiring, storage schema, "I want to… → go to" table. |
 | `data/seed-data.js` | The 5 sample prompts + starter categories used on first install. |
 | `utils/*.js` | `ids.js` (uuid/slug), `dates.js`, `validation.js`, `dom.js` (escaping, delegation, debounce). |
 
