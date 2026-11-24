@@ -4,7 +4,7 @@
 
 | # | Item | Status |
 |---|---|---|
-| 1 | Host privacy policy for Web Store listing | Open — waiting on your choice |
+| 1 | Host privacy policy for Web Store listing | Deferred 2026-11-23 — until the Web Store listing |
 | 2 | Unused `storage.updateCategory` | Waiting on your approval |
 | 3–6 | Known limitations | Accepted |
 
@@ -15,7 +15,7 @@ None.
 None.
 
 ## DECIDE
-1. Web Store listing needs a public privacy-policy URL. `webstore/privacy-policy.html` isn't hosted anywhere (no GitHub Pages). Options: enable Pages on the public repo, or host elsewhere.
+1. Web Store listing needs a public privacy-policy URL. `webstore/privacy-policy.html` isn't hosted anywhere (no GitHub Pages). Recommended: GitHub Pages using a small Actions workflow that publishes only `webstore/` (URL `https://vtak007.github.io/Prompt-Whisperer/privacy-policy.html`). Publishing the whole `main` root also works, but it turns every repo `.md` file into a web page too. Keep repo issues enabled, since the policy links to them for contact.
 2. `updateCategory` in `services/storage.js` has no callers since `renameCategory` replaced it; remove?
 
 ## BLOCKED
