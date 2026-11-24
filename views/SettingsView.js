@@ -55,7 +55,7 @@ export function renderSettingsView(state) {
     <div class="field">
       <label for="setting-model">Model</label>
       <div style="display:flex; gap:8px;">
-        <input type="text" id="setting-model" data-field="setting-optimization-model" list="model-suggestions" value="${escapeHtml(s.optimization.model)}" placeholder="claude-haiku-4-5-20251001" autocomplete="off" style="flex:1;" />
+        <input type="text" id="setting-model" data-field="setting-optimization-model" list="model-suggestions" value="${escapeHtml(s.optimization.model)}" placeholder="claude-haiku-5-5" autocomplete="off" style="flex:1;" />
         <button type="button" class="btn" data-action="refresh-models" ${state.modelsLoading ? 'disabled' : ''} title="Fetch the latest model list from Anthropic" aria-label="Refresh model list">
           ${state.modelsLoading ? '…' : '⟳'}
         </button>
