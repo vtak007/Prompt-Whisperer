@@ -79,6 +79,35 @@ export async function updateCategory(id, patch) {
   return root.categories;
 }
 
+// Renames a category and rewrites the denormalised `categoryName` on its
+// prompts in the same write, so the two can't drift apart on disk.
+export async function renameCategory(id, name) {
+  const root = await getAll();
+  root.categories = root.categories.map((c) => (c.id === id ? { ...c, name } : c));
+  root.prompts = root.prompts.map((p) => (p.categoryId === id ? { ...p, categoryName: name } : p));
+  await chrome.storage.local.set({ categories: root.categories, prompts: root.prompts });
+  return root;
+}
+
+// Repairs prompts whose `categoryName` no longer matches their category
+// (left behind by renames made before renameCategory persisted it).
+// Writes only when something actually changed.
+export async function syncCategoryNames() {
+  const root = await getAll();
+  const names = new Map(root.categories.map((c) => [c.id, c.name]));
+  let changed = false;
+  root.prompts = root.prompts.map((p) => {
+    const name = names.get(p.categoryId);
+    if (name && p.categoryName !== name) {
+      changed = true;
+      return { ...p, categoryName: name };
+    }
+    return p;
+  });
+  if (changed) await chrome.storage.local.set({ prompts: root.prompts });
+  return root;
+}
+
 export async function deleteCategory(id, { reassignToId = null } = {}) {
   const root = await getAll();
   root.categories = root.categories.filter((c) => c.id !== id);
@@ -137,6 +166,8 @@ export const storage = {
   getCategories,
   saveCategory,
   updateCategory,
+  renameCategory,
+  syncCategoryNames,
   deleteCategory,
   renameTag,
   deleteTag,
