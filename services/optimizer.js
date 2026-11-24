@@ -48,7 +48,7 @@ async function mockProvider({ prompt, goal, instructions }) {
   return { text: parts.join('\n'), model: 'mock' };
 }
 
-const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
+const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-5-5';
 
 async function anthropicProvider({ prompt, goal, instructions, model, apiKey }) {
   if (!apiKey || !apiKey.trim()) {
@@ -79,7 +79,9 @@ async function anthropicProvider({ prompt, goal, instructions, model, apiKey }) 
       },
       body: JSON.stringify({
         model: usedModel,
-        max_tokens: 2048,
+        // Haiku 5.5 thinks by default and thinking tokens count against
+        // max_tokens, so leave headroom for the rewritten prompt itself.
+        max_tokens: 16000,
         messages: [{ role: 'user', content: userMessage }],
       }),
     });
