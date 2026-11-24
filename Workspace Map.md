@@ -12,7 +12,7 @@ tags: [workspace-map, prompt-whisperer, chrome-extension]
 > [!NOTE]
 > **What this is**: where things live and how they connect in this MV3 side-panel extension. It has no build step and no framework; the browser loads the ES modules directly.
 
-Files: see the **Key Files** table in `CLAUDE.md`. Architecture rules and gotchas: `CLAUDE.md` → *Architecture notes*. Features and install: `README.md`. Full spec and deferred work: `Prompt Whisperer Features.md`.
+Files: see the **Key Files** table in `CLAUDE.md`. Architecture rules and gotchas: `CLAUDE.md` → *Architecture notes*. Features and install: `README.md`. Full spec and deferred work: `Prompt Whisperer Features.md`. Open items, accepted limitations and pending git actions: `open-items.md`.
 
 > [!WARNING]
 > The repo is **public**. The user's prompt library and Anthropic API key live in `chrome.storage.local` and never in the repo. Exported backups (`prompt-whisperer-backup-*.json`, `prompt-assistant-backup-*.json`) are gitignored. Keep it that way.
